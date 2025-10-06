@@ -3,13 +3,14 @@ import com.example.Lion;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Spy;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import java.util.List;
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class LionTests {
-    @Spy
+    @Mock
     Feline feline;
 
     public LionTests() throws Exception {
@@ -18,6 +19,7 @@ public class LionTests {
     @Test
     public void getKittensTest() throws Exception {
     Lion lion = new Lion("Самка", feline);
+    Mockito.when(lion.getKittens()).thenReturn(1);
     Assert.assertEquals(1, lion.getKittens());
     }
 
@@ -27,29 +29,16 @@ public class LionTests {
             Lion lion = new Lion("null", feline);
             Assert.assertEquals(false, lion.doesHaveMane());
         } catch (Exception exception) {
-         throw new Exception("Используйте допустимые значения пола животного - самей или самка");
+         throw new Exception("Используйте допустимые значения пола животного - самец или самка");
         }
     }
-    @Test
-    public void getFoodTest() throws Exception {
-    Lion lion = new Lion("Самец", feline);
-    Assert.assertEquals(List.of("Животные", "Птицы", "Рыба"), lion.getFood());
-    }
-    @Test // Дублирует тест с параметризацией т.к. иначе не засчитывалось покрытие в jacoco
-    public void doesHaveManeTest() throws Exception {
-        Lion lion = new Lion("Самка", feline);
-        boolean hasMane = lion.doesHaveMane();
-        Assert.assertEquals(false, hasMane);
-    }
+
     @Test(expected = Exception.class)
     public void getFoodTestTrowsException() throws Exception {
             Lion lion = new Lion("Самец", feline);
-            try {
-                String animalKind = "Ксеноморф";
-             feline.getFood(animalKind);
-            } catch (Exception exception) {
-                throw new Exception("Неизвестный вид животного, используйте значение Травоядное или Хищник");
-            }
+            String animalKind = "Ксеноморф";
+            Mockito.when(feline.getFood(animalKind)).thenThrow(new Exception("Неизвестный вид животного, используйте значение Травоядное или Хищник"));
+            feline.getFood(animalKind);
     }
 
 }

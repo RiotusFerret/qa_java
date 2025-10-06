@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.mockito.Mock;
 
 @RunWith(Parameterized.class)
 public class LionTestsParameterized {
@@ -12,7 +11,6 @@ public class LionTestsParameterized {
     private final boolean hasManeExp;
     boolean hasMane;
 
-    @Mock
     Feline feline;
 
     public LionTestsParameterized(String sex, boolean hasManeExp) {
@@ -33,6 +31,5 @@ public class LionTestsParameterized {
             hasMane = lion.doesHaveMane();
             Assert.assertEquals(hasManeExp, hasMane);
     }
-
 }
 

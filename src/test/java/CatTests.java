@@ -1,35 +1,33 @@
 import com.example.Cat;
 import com.example.Feline;
-import com.example.Predator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import java.util.List;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CatTests {
     @Mock
     Feline mockFeline;
 
-    Predator predator;
-
     @Test
     public void getSoundTest(){
         Cat cat = new Cat(mockFeline);
-        assertEquals("Мяу", cat.getSound());
+        Assert.assertEquals("Мяу", cat.getSound());
+    }
+    @Test
+    public void getFoodTest() throws Exception {
+        Cat cat = new Cat(mockFeline);
+        Mockito.when(mockFeline.eatMeat()).thenReturn(List.of("Животные", "Птицы", "Рыба"));
+        Assert.assertEquals(List.of("Животные", "Птицы", "Рыба"), cat.getFood());
     }
     @Test(expected = Exception.class)
-    public void getFoodTestTrowsException() throws Exception {
+        public void getFoodTestTrowsException() throws Exception {
         Cat cat = new Cat(mockFeline);
-        try {
-            Assert.assertEquals(List.of(), cat.getFood());
-        } catch (Exception exception) {
-            throw new Exception("Ошибка");
-        }
-        verify(predator, times(1)).eatMeat();
+        Mockito.when(mockFeline.eatMeat()).thenThrow(new Exception("Неизвестный вид животного, используйте значение Травоядное или Хищник"));
+        cat.getFood();
     }
 }
